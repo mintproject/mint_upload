@@ -7,7 +7,7 @@ fi
 
 version=${1}
 
-cat > src/dame/__init__.py <<EOF
+cat > src/mint_upload/__init__.py <<EOF
 # -*- coding: utf-8 -*-
 __version__ = "${version}"
 EOF
