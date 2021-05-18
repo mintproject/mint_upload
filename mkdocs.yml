@@ -1,0 +1,17 @@
+site_name: Desktop Application for Model Execution (DAME)
+nav:
+  - Home: index.md
+  - Usage: usage.md
+  - Selecting local files for execution: local_data.md
+  - Changing default parameters: parameters.md
+  - Using Data Transformations: transformation.md
+  - Configuring user profiles: profiles.md
+theme: 
+  name: material
+  logo: 'logo.png'
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
