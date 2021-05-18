@@ -36,7 +36,7 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
       run: |
         python setup.py install
-        pytest --cov=./ --cov-report=xml
+        pytest --cov=./src/mint_upload --cov-report=xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
