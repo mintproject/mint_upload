@@ -48,6 +48,12 @@ class Uploader:
         response = requests.post(
             self.auth_server, headers=headers, data=data, allow_redirects=False)
         tokens = json.loads(response.text)
+        if response.status_code == 401:
+            raise requests.exceptions.HTTPError("401")
+        
+        if not "access_token" in tokens:
+            raise requests.exceptions.HTTPError("500")
+     
         access_token = tokens['access_token']
 
         response = self.sts_client.assume_role_with_web_identity(
@@ -56,11 +62,9 @@ class Uploader:
             WebIdentityToken=access_token,
             DurationSeconds=604800
         )
-
         self.access_key_id = response['Credentials']['AccessKeyId']
         self.secret_access_key = response['Credentials']['SecretAccessKey']
         session_token = response['Credentials']['SessionToken']
-
         s3_resource = boto3.resource('s3',
                                      endpoint_url=self.s3_server,
                                      aws_access_key_id=self.access_key_id,
@@ -79,8 +83,6 @@ class Uploader:
             object_name (str, optional): S3 object name. If not specified the file_name is used. \
                 Defaults to None.
 
-        Returns:
-            [boolean]: [Returns true if the file has been upload or false if not]
         """
 
         # If S3 object_name was not specified, use file_name
@@ -95,10 +97,8 @@ class Uploader:
                 Callback=ProgressPercentage(file_name)
             )
         except ClientError as error:
-            logging.error(error)
-            return False
-        return True
-
+            raise error
+        
     def create_bucket(self, bucket_name: str) -> bool:
         """Create a new bucket
 
