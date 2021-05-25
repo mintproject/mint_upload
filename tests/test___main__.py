@@ -1,10 +1,8 @@
 """Test the object storage
 """
 
-import os
-import requests
-import pytest
 from mint_upload.object_storage import  Uploader
+import os
 
 mint_auth_server = "https://auth.mint.mosorio.dev/auth/realms/development/protocol/openid-connect/token"
 mint_s3_server = "https://s3.mint.mosorio.dev"
@@ -24,16 +22,6 @@ def test_upload_file(tmp_path):
     p = d / 'hello.txt'
     p.write_text("context")
     uploader.upload_file(str(p), "test")
-
-
-def test_upload_file_fail(tmp_path):
-    """Check if we can upload a file
-
-    Args:
-        tmp_path ([type]): pytest temp path
-    """
-    with pytest.raises(requests.exceptions.HTTPError):
-        Uploader(mint_s3_server, mint_auth_server, username, password)
 
 def test_get_cmd_line():
     uploader = Uploader(mint_s3_server, mint_auth_server, username, password)
